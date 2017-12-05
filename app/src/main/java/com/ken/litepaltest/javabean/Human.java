@@ -11,15 +11,12 @@ public class Human extends DataSupport {
     private String name;
     private String sex;
     private int age;
-
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
-
     public String getName() {
         return name;
     }
@@ -42,5 +39,13 @@ public class Human extends DataSupport {
 
     public void setAge(int age) {
         this.age = age;
+    }
+    public Human(String name,String sex,int age){
+        this.name = name;
+        this.sex = sex;
+        this.age = age;
+    }
+    public Human(){
+
     }
 }

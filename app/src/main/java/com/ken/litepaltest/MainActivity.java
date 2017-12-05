@@ -1,5 +1,7 @@
 package com.ken.litepaltest;
 
+import android.content.Intent;
+import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -7,12 +9,19 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.ken.litepaltest.javabean.Human;
+
+import org.litepal.tablemanager.Connector;
+
+import java.sql.Connection;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private EditText etName,etAge;
     private Button btnAdd,btnQuery;
     private Spinner spSex;
-    String name,sex,age;
+    String name = null,sex = null,age = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,14 +38,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnQuery = (Button)findViewById(R.id.btn_query);
     }
 
-    void setOnClick(){
+    void setOnClick() {
         btnAdd.setOnClickListener(this);
         btnQuery.setOnClickListener(this);
         //获取下拉框的数据
-        spSex.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        spSex.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 sex = (String) spSex.getSelectedItem();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
         });
@@ -49,10 +62,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //获取输入框的数据
                 name = etName.getText().toString();
                 age = etAge.getText().toString();
-
+                try {
+                    Connector.getDatabase();
+                    Human human = new Human();
+                    human.setName(name);
+                    human.setSex(sex);
+                    human.setAge(Integer.parseInt(age));
+                    human.save();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }finally {
+                    Toast.makeText(this, "添加成功", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.btn_query:
-
+                Intent intent = new Intent(this,QueryDataActivity.class);
+                startActivity(intent);
                 break;
             default:
 

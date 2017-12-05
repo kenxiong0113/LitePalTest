@@ -42,9 +42,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="84dp"
         android:text="添加"
+        android:layout_marginStart="32dp"
         android:layout_below="@+id/textView3"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="56dp" />
+        android:layout_alignParentStart="true" />
 
     <Button
         android:id="@+id/btn_query"
@@ -53,8 +53,8 @@
         android:text="查询"
         android:layout_alignBaseline="@+id/btn_add"
         android:layout_alignBottom="@+id/btn_add"
-        android:layout_alignEnd="@+id/et_age"
-        android:layout_marginEnd="35dp" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="32dp" />
 
     <EditText
         android:id="@+id/et_name"
