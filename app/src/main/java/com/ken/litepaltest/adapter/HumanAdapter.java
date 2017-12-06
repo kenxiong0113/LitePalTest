@@ -1,9 +1,11 @@
 package com.ken.litepaltest.adapter;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.icu.text.AlphabeticIndex;
 import android.os.Message;
 import android.preference.DialogPreference;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ken.litepaltest.R;
+import com.ken.litepaltest.activity.UpdataActivity;
 import com.ken.litepaltest.javabean.Human;
 
 import org.litepal.crud.DataSupport;
@@ -54,21 +57,31 @@ public class HumanAdapter extends RecyclerView.Adapter<HumanAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Human human = mList.get(position);
-        holder.tv1.setText("姓名    |    "+human.getName());
-        holder.tv2.setText("性别    |    "+human.getSex());
-        holder.tv3.setText("年龄    |    "+human.getAge());
+        final String name = human.getName();
+        final String sex = human.getSex();
+        final String age = String.valueOf(human.getAge());
+        holder.tv1.setText("姓名    |    "+name);
+        holder.tv2.setText("性别    |    "+sex);
+        holder.tv3.setText("年龄    |    "+age);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(view.getContext());
                 dialog.setTitle("更改这条信息？");
-                dialog.setMessage("姓名----"+human.getName());
+                dialog.setMessage("姓名----"+name+"\n"+
+                                  "性别----"+sex+"\n"+
+                                  "年龄----"+age );
                 dialog.setCancelable(false);
                 dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        Intent intent = new Intent(view.getContext(), UpdataActivity.class);
+                        intent.putExtra("name",name);
+                        intent.putExtra("sex",sex);
+                        intent.putExtra("age",age);
+                        view.getContext().sendBroadcast(intent);
+                        view.getContext().startActivity(intent);
                     }
                 });
                 dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -85,15 +98,18 @@ public class HumanAdapter extends RecyclerView.Adapter<HumanAdapter.ViewHolder> 
             public boolean onLongClick(final View view) {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(view.getContext());
                 dialog.setTitle("删除这条信息？");
-                dialog.setMessage("姓名----"+human.getName());
+                dialog.setMessage("姓名----"+human.getName()+"\n"+
+                                  "性别----"+human.getSex()+"\n"+
+                                  "年龄----"+human.getAge() );
                 dialog.setCancelable(false);
                 dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        DataSupport.deleteAll(Human.class,"name = ? and sex = ? and age = ?",human.getName(),human.getSex(), String.valueOf(human.getAge()));
-//                        DataSupport.delete(Human.class,position+1);
+                        DataSupport.deleteAll(Human.class,"name = ? and sex = ? and age = ?",
+                                human.getName(),human.getSex(), String.valueOf(human.getAge()));
                         Log.e("HumanAdapter", "----" + human.getId());
                         Toast.makeText(view.getContext(), "删除成功", Toast.LENGTH_SHORT).show();
+                        notifyItemRemoved(position);
                     }
                 });
                 dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -106,7 +122,6 @@ public class HumanAdapter extends RecyclerView.Adapter<HumanAdapter.ViewHolder> 
                 return false;
             }
         });
-
     }
 
     @Override

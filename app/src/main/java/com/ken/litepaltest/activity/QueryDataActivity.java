@@ -1,11 +1,13 @@
-package com.ken.litepaltest;
+package com.ken.litepaltest.activity;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
+import com.ken.litepaltest.R;
 import com.ken.litepaltest.adapter.HumanAdapter;
 import com.ken.litepaltest.javabean.Human;
 
@@ -14,6 +16,9 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author by ken 查询数据
+ */
 public class QueryDataActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private SwipeRefreshLayout refreshLayout;
@@ -56,7 +61,7 @@ public class QueryDataActivity extends AppCompatActivity {
     SwipeRefreshLayout.OnRefreshListener refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
         public void onRefresh() {
-           onResume();
+            onResume();
             refreshLayout.setRefreshing(false);
         }
     };
